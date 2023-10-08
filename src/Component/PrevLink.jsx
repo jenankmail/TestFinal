@@ -1,3 +1,3 @@
 import { createContext } from "react";
 
- export let PrevLink =createContext({link:"0"});
+export let PrevLink=createContext(false);

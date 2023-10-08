@@ -11,30 +11,24 @@ import Profile from './Component/Profile';
 import Modal from './Component/Modal';
 import { Routes ,Route } from 'react-router-dom';
 import Explore from './Component/Explore';
-import { useContext } from 'react';
-import { PrevLink } from './Component/PrevLink';
-
+import {PrevLink} from './Component/PrevLink';
+import { useContext, useState } from 'react';
+import SignUp from './Component/SignUp'
+//import { Login } from '@mui/icons-material';
+import LogInInstagram from './Component/LogInInstagram'
 function App() {
-  const prev =useContext(PrevLink);
-  
-  
+ const prev=useContext(PrevLink);
+ let [showModal,setShowModal]=useState(true)
+console.log(prev)
   return (
     <>
     
     <div className="App">
-     
-if(prev.link=="/mmo"){
-  <Home/>
-}else{
-  <Profile/>
-}
 
-<Routes>
-<Route path='/mmo' element={<Modal/>} /> 
+<Home/>
 
-</Routes>
     </div>
-   
+  
     </>
   );
 }

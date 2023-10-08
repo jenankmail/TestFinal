@@ -29,29 +29,33 @@ import Profile from './Profile';
 import Test from './Test';
 import { Routes ,Route ,Link, Navigate } from 'react-router-dom';
 import Messages from './Messages';
-import { Modal } from '@mui/material';
+//import { Modal } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { PrevLink } from './PrevLink';
 import App from '../App';
+import Modal from './Modal';
+import SignUp from './SignUp';
+import LogInInstagram from './LogInInstagram';
 const drawerWidth = 240;
 
 function Home() {
-  const [PrevModal,SetPrevModal] =useState(null);
+  let [ShowModal,SetShowModal]=useState(false)
 
-useEffect(()=>{
-  if(PrevModal=='/mmo'){
-    console.log("create")
-  }else{
-  <PrevLink.Provider  value={{link:PrevModal}}/>
- console.log(PrevModal)
+  function CreateAlert(){
+  SetShowModal(true);
   }
-})
-  let listheader =[{name:'Home' ,icon:<HomeIcon/>,link:"/home"}, {name:'Search', icon:<SearchIcon/>,link:"*"}, {name:'Explore',icon:<ExploreIcon />,link:"/explore"}, {name:'Reels',icon:<SlideshowIcon/>,link:"/reels"},{name:'Messages',icon:<ChatIcon/>,link:"/massages"},{name:'Notification',icon:<FavoriteBorderIcon/>,link:"notification"},{name:'Create',icon:<AddCircleOutlineIcon/>,link:"/mmo"},{name:'Khalid Kmail',icon:<Avatar alt="Remy Sharp" src="../Assets/Avatars/steward.png"  sx="small"/>,link:"/profile"}];
+
+ function closeModal(){
+  if(ShowModal){
+  SetShowModal(false)}
+ }
+ 
+  let listheader =[{name:'Home' ,icon:<HomeIcon/>,link:"/home"}, {name:'Search', icon:<SearchIcon/>,link:"*"}, {name:'Explore',icon:<ExploreIcon />,link:"/explore"}, {name:'Reels',icon:<SlideshowIcon/>,link:"/reels"},{name:'Messages',icon:<ChatIcon/>,link:"/massages"},{name:'Notification',icon:<FavoriteBorderIcon/>,link:"notification"}];
   const drawer = (
     <div style={{backgroundColor:"black" ,color:"white" ,height:"100%"}}>
-      <Divider />
+      <Divider  />
       <List>
         {listheader.map((text) => (
           <ListItem key={text} disablePadding>
@@ -59,26 +63,41 @@ useEffect(()=>{
               <ListItemIcon style={{color:"white"}}>
                 {text.icon}
               </ListItemIcon>
-              <Link to={text.link} style={{textDecoration:"none" ,color:"white"}} onClick={()=>{
-                SetPrevModal(text.link)
-              }} >
+              <Link to={text.link} style={{textDecoration:"none" ,color:"white"}}  >
                
               <ListItemText primary={text.name} />
               </Link>
             </ListItemButton>
           </ListItem>
         ))}
+        
       </List>
+    <div style={{paddingRight:"90px"}}>
+    <ListItemIcon style={{color:"white"}}>
+    <AddCircleOutlineIcon/>
+              </ListItemIcon>
+   
+<button onClick={CreateAlert} style={{border:"none",backgroundColor:"black",color:"white"}}><ListItemText primary="Create"/></button>
+
+    </div>
+    <div style={{paddingRight:"80px"}}>
+    <ListItemIcon style={{color:"white"}}>
+    <Avatar alt="Remy Sharp" src="../Assets/Avatars/steward.png"  sx="small"/>
+              </ListItemIcon>
+              <Link to="/profile" style={{textDecoration:"none" ,color:"white"}}  >
+               Khalid Kmail
+               </Link>
+    </div>
+              
       <Divider />
       
     </div>
   );
 
-  const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     <>
-    <Box sx={{ display: 'flex' ,backgroundColor:"black"}}>
+    <Box sx={{ display: 'flex' ,backgroundColor:"black"}} onClick={closeModal}>
      
       <Box
         component="nav"
@@ -96,21 +115,29 @@ useEffect(()=>{
         >
         <img src='../Assets/instagram-logo.png' alt='hello' style={{backgroundColor:"black" }}/>
           {drawer}
+          
+  <Modal isVisible={ShowModal} />
         </Drawer>
+
       </Box>
       <Box sx={{backgroundColor:"black" }}  >
-        
+      
       <Routes>
          <Route  path="/home" element={<ContentHome/>}/>
          <Route  path="/" element={<ContentHome/>}/>
          <Route  path="/explore" element={<Explore/>}/>
          <Route  path="/massages" element={<Messages/>}/>
          <Route  path="/profile" element={<Profile/>}/>
-         
+        
+
     </Routes>
-    
+   
       </Box>
+     
+
+
     </Box>
+   
     </>
   );
 }
