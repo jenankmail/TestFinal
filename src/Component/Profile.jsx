@@ -9,30 +9,47 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Test from './Test'
+import { useState } from 'react';
+import ProfileModal from './ProfileModal';
 function Profile() {
+    const userName=localStorage.getItem("userName");
+    const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+    const avatar=localStorage.getItem("avatar")
+    const bio =localStorage.getItem("userbio")
+    const userPost=localStorage.getItem("userPosts")
+    function handleSetting(){
+      const updatepio=prompt(<form><input type='text'/></form>)
+      
+    }
     
     return (
+  
+      <Box>
         <Paper
           sx={{
             p: 2,
             margin: 'auto',
             maxWidth: 650,
             flexGrow: 1,
-            backgroundColor:"black"
-            
+            backgroundColor:"black",
+            marginLeft:"100px"
           }}
         >
           <Grid container spacing={2} style={{color:"white"}}>
             <Grid item>
               <ButtonBase sx={{ width: 128, height: 128 }}>
-              <Avatar alt="Remy Sharp" src="../Assets/Avatars/steward.png"  sx={{ width: 120, height: 120 }}/>
+              <Avatar alt="Remy Sharp" src={avatar} sx={{ width: 120, height: 120 }}/>
 
               </ButtonBase>
             </Grid>
             <Grid item xs={12} sm container >
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={4}>
-        iibrahhemi
+        {userName}
         </Grid>
         <Grid item xs={4}>
         <Button variant="contained" style={{backgroundColor:"white",color:"black"}}>Contained</Button>
@@ -40,10 +57,10 @@ function Profile() {
         </Grid>
         <Grid item xs={4}>
         <Button variant="contained" style={{backgroundColor:"white",color:"black"}}>View action</Button>
-        <SettingsIcon/>
+        <SettingsIcon onClick={handleOpen}/>
         </Grid>
         <Grid item xs={4}>
-9 Posts      </Grid>
+{userPost} Posts      </Grid>
         <Grid item xs={4}>
 525 followers   </Grid>
         <Grid item xs={4}>
@@ -52,15 +69,18 @@ function Profile() {
       </Grid>
       <Grid item xs={4}>
         <br/>
-ابراهيم <br/>
+جنان <br/>
 @aaup _edu <br/>
-the sky is limit </Grid>   
+{bio} </Grid>   
              
             </Grid>
           </Grid>
-    <Test />
+   
         </Paper>
-        
+        <Test />
+        <ProfileModal open={open} handleClose={handleClose} />
+
+        </Box>
       );
     }
     
