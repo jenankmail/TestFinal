@@ -78,7 +78,7 @@ axios.post("http://16.170.173.197/users/signup", userData)
  <p style={{color:"#E0E0E0",fontSize:"16px"}}>By signing up ,your agree to our terms ,Data  policy and Cookies Police</p>
   </Box>
   <div style={{backgroundColor:"#1D1D1D",marginTop:"10px",height:"50px",width:"350px",borderRadius:"10px"}}>
-<div style={{paddingTop:"10px"}}>Have an account ?  <Link  href="/login" style={{textDecoration:"none" ,color:"blue"}}>Log in</Link></div>
+<div style={{paddingTop:"10px"}}>Have an account ?  <Link  href="/" style={{textDecoration:"none" ,color:"blue"}}>Log in</Link></div>
     </div>    
         </Grid>
        

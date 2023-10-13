@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
+import axios from "axios"
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -11,6 +12,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Test from './Test'
 import { useState } from 'react';
 import ProfileModal from './ProfileModal';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 function Profile() {
     const userName=localStorage.getItem("userName");
     const [open, setOpen] = useState(false);
@@ -21,11 +23,41 @@ function Profile() {
     const avatar=localStorage.getItem("avatar")
     const bio =localStorage.getItem("userbio")
     const userPost=localStorage.getItem("userPosts")
-    function handleSetting(){
-      const updatepio=prompt(<form><input type='text'/></form>)
+    const token = localStorage.getItem("token")
+
+    const userId=localStorage.getItem("userId")
+    function deleteAccount(){
+      const newDiscraption = prompt("You are sure that you want to delete the account, knowing that everything related to it will be gone!! yes or no");
+     if(newDiscraption=="yes"){
+      axios 
+      .request({ 
+        method: "delete", 
+        url: `http://16.170.173.197/users`, 
+        data: { 
+          id: userId, 
+        }, 
+        headers: { 
+          Authorization: `Bearer ${token}`, 
+        }, 
+      }) 
+      .then((response) => { 
+     
       
+      }) 
+      .catch((error) => { 
+        console.error("Error deleting post:", error); 
+        const errorMessage = "An error occurred while deleting the post , Make sure the post is for you: " + error;
+        window.alert(errorMessage);
+      }); 
+ 
+     }else  if(newDiscraption!=="no"){
+      
+      alert("You entered incorrect information")
+      const newDiscraption = prompt("You are sure that you want to delete the account, knowing that everything related to it will be gone!! yes or no");
+
+     }
+
     }
-    
     return (
   
       <Box>
@@ -58,6 +90,7 @@ function Profile() {
         <Grid item xs={4}>
         <Button variant="contained" style={{backgroundColor:"white",color:"black"}}>View action</Button>
         <SettingsIcon onClick={handleOpen}/>
+        <DeleteForeverIcon style={{marginLeft:"130px"}} onClick={deleteAccount}/>
         </Grid>
         <Grid item xs={4}>
 {userPost} Posts      </Grid>

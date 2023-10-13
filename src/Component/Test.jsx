@@ -63,22 +63,28 @@ export default function BasicTabs() {
   };
   const [postUser,setPostuser]=useState([]);
   const token = localStorage.getItem("token")
-  
+  const [posts,setPosts]=useState([])
   const userId=localStorage.getItem("userId")
-useEffect(()=>{
- 
-  axios.get("http://16.170.173.197/posts", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((response) => {
-    setPostuser(response.data.posts)
-   
-  }).catch((error) => {
-    console.log("Error Fedching memories", error)
-  })
 
-  },[]); 
+  const fetchData = () => {
+    axios.get("http://16.170.173.197/posts", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => {
+      setPostuser(response.data.posts)
+        }).catch((error) => {
+      console.log("Error Fedching memories", error)
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   const postsUser=postUser.filter((post)=>post.user.id==userId);
   function updateicon(id){
     const description=prompt("enter new description")
@@ -98,6 +104,7 @@ useEffect(()=>{
       }) 
       .then((response) => { 
         console.log(response); 
+        fetchData(); 
       }) 
       .catch((error) => { 
         console.error("Error deleting post:", error); 
@@ -116,7 +123,7 @@ useEffect(()=>{
       }, 
     }) 
     .then((response) => { 
-   
+      fetchData(); 
 
     }) 
     .catch((error) => { 
@@ -177,17 +184,17 @@ if(newDiscraption=="delete"){
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" style={{marginLeft:"280px"}} >
       
       
-          <Tab sx={{color:"#1D1D1D"}} label={<div><CalendarViewMonthIcon style = { {verticalAlign : 'middle'} } /> Profile</div>}{...a11yProps(0)} />
+          <Tab  style={{color: value === 0 ? 'white' : '#1D1D1D', }} label={<div><CalendarViewMonthIcon style = { {verticalAlign : 'middle'} } /> Profile</div>}{...a11yProps(0)} />
           
-          <Tab sx={{color:"#1D1D1D"}}  label={<div><BookmarkBorderIcon style = { {verticalAlign : 'middle'} } /> Reels </div>} {...a11yProps(1)} />
-          <Tab sx={{color:"#1D1D1D"}}  label={<div>< PortraitIcon style = { {verticalAlign : 'middle'} } /> Tageed </div>} {...a11yProps(2)} />
+          <Tab style={{color: value === 1  ? 'white' : '#1D1D1D', }}  label={<div><BookmarkBorderIcon style = { {verticalAlign : 'middle'} } /> Reels </div>} {...a11yProps(1)} />
+          <Tab style={{color: value === 2 ? 'white' : '#1D1D1D', }}  label={<div>< PortraitIcon style = { {verticalAlign : 'middle'} } /> Tageed </div>} {...a11yProps(2)} />
         </Tabs>
         <hr style={{marginTop:"0" ,borderColor:"#1D1D1D"}}/>
       </Box>
       <CustomTabPanel value={value} index={0}>
-      <ImageList sx={{ width: 900, height: 1000 }} cols={3} rowHeight={164}>
+      <ImageList sx={{ width: 900, height: 1000 }} cols={3} rowHeight={350}>
       {postsUser.map((item) => (
-        <ImageListItem key={item.img}  style={{paddingRight:"100px"}}>
+        <ImageListItem key={item.img} >
        <div><DeleteIcon style={{color:"white",marginRight:"10px"}}onClick={()=>{deleteicon(item.id)}} />
         <EditIcon style={{color:"white",marginRight:"90px"}}onClick={()=>{updateicon(item.id)}}/></div>
           <img
@@ -196,7 +203,7 @@ if(newDiscraption=="delete"){
             src={`${item.image}?w=164&h=164&fit=crop&auto=format`}
             alt={item.description}
             loading="lazy"
-           style={{margin:"40px",width:"150px",height:"200px"}}
+           style={{margin:"20px",width:"250px",height:"200px"}}
           />
         </ImageListItem>
       ))}

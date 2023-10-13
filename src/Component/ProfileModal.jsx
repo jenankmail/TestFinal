@@ -46,7 +46,7 @@ const [url,setUrl]=useState("");
     reader.readAsDataURL(file);
   };
   const userid=localStorage.getItem("userId")
-
+  const [newUserName,setUserName]=useState("");
 
   
   const VisuallyHiddenInput = styled('input')({
@@ -60,7 +60,9 @@ const [url,setUrl]=useState("");
     whiteSpace: 'nowrap',
     width: 1,
   });
-
+function handleUserName(e){
+  setUserName(e.target.value)
+}
   function handleTitleChange(e){
 setTitle(e.target.value);
   }
@@ -75,7 +77,7 @@ setTitle(e.target.value);
         id:userid,
         bio:description,
         avatar:url,
-        
+        userName:newUserName,
 
 
       },
@@ -119,13 +121,20 @@ setTitle(e.target.value);
                <br/>
                <from>
                <div className='ModalTitle'>
-               <label style={{textAlignLast:"right",paddingRight:"420px"}}>Pio</label>
+
+                <label style={{textAlignLast:"right",paddingRight:"420px"}}>userName</label>
+                <input type="text" value={newUserName} onChange={handleUserName} style={{width:"90%",height:"30px",borderRadius:"10px",backgroundColor:"#686262"}}/>
+               
+                </div>
+                <br/>
+               <div className='ModalTitle'>
+               <label style={{textAlignLast:"right",paddingRight:"420px"}}>New Pio</label>
+               </div>
                <br/>
                <textarea id='bio' value={description} name="body"rows="8" cols="73" onChange={handledescriptionChange} style={{width:"90%",height:"80px",borderRadius:"10px",backgroundColor:"#686262"}} ></textarea>
               
-               </div>
              
-               <label style={{textAlignLast:"right",paddingRight:"420px"}}>url</label>
+               <label style={{textAlignLast:"right",paddingRight:"420px"}}> url</label>
                <br/>
                <input id='url' value={url} name="body"rows="8" cols="73" onChange={handleUrlChange} style={{width:"90%",height:"30px",borderRadius:"10px",backgroundColor:"#686262"}}/>
                

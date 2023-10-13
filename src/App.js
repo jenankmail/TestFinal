@@ -39,7 +39,6 @@ function App() {
     
     <Route path='/signup' element= {<ProtectedAuth><SignUp/></ProtectedAuth>}/>
     
-    
     <Route path='/' element= {<ProtectedAuth><LogIn/> </ProtectedAuth>}/>
     <Route path='/' element= {<LogIn/>}/>
     <Route path='*' element={<NotFound/>}/>

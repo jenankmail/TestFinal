@@ -23,74 +23,76 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import {  IconButton } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-
-
+import CommentIcon from '@mui/icons-material/Comment';
+import commentIcon from '../Assets/commont.png';
 function ContentHome() {
   const navigate=useNavigate();
   const [posts,setPosts]=useState([])
+  const [postSelected,setPostSelected]=useState(0);
   const [toggid,setToggid]=("");
+  const [menu,setMenu]=useState(false);
+  const [menuClose,setMenuClose]=useState(false);
   const token = localStorage.getItem("token")
   const [isFavorite, setIsFavorite] = useState(localStorage.getItem('like'));
-  
-localStorage.getItem('like',isFavorite);
+  const avatar=localStorage.getItem("avatar");
+  const [likeId,setLikeId]=useState("");
+localStorage.setItem('like',isFavorite);
   function handleToggleFavorite (id){
     
     setIsFavorite(!isFavorite);
     
   };
   
-  console.log(token)
-  useEffect(()=>{
+  const fetchData = () => {
     axios.get("http://16.170.173.197/posts", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((response) => {
-    setPosts(response.data.posts)
-  }).catch((error) => {
-    console.log("Error Fedching memories", error)
-  })
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => {
+      setPosts(response.data.posts)
+    }).catch((error) => {
+      console.log("Error Fedching memories", error)
+    })
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  },[]);
-  function addLike(postid){
-    if(isFavorite){
-    console.log("not like")
-    }else{
-      
-      axios.get(`http://16.170.173.197/posts/likes/${postid}`,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => {
-           const token = response.data.token;
-           const existinglike=response.data.likes;
-           const newlike=existinglike+1;
-           axios.put(`http://16.170.173.197/posts/likes/${postid}`,{
-            likes: newlike
-           },{
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }).then((response) => {
-            console.log(response)
-          }).catch((error) => {
-            console.log(error)
-          })
+  useEffect(() => {
+    fetchData();
+  }, []);
   
-        }).catch((error) => {
-          console.log(error)
-        })
-    }
+  function addLinkePost(id){
+    console.log(id)
+    setLikeId(id);
+    
+    setIsFavorite(!isFavorite);
+    axios 
+    .request({ 
+      method: "post", 
+      url: `http://16.170.173.197/posts/like/${id}`, 
+      data: { 
+        id: id, 
+      }, 
+      headers: { 
+        Authorization: `Bearer ${token}`, 
+      }, 
+    }) 
+      .then((response) => {
+        console.log(response)
+        fetchData();
+
+      }).catch((error) => {
+        console.log(error)
+      }) 
   }
-  function handleDelete(postId){
-    console.log(postId)
+  function handleDelete(){
     axios 
       .request({ 
         method: "delete", 
-        url: `http://16.170.173.197/posts/${postId}`, 
+        url: `http://16.170.173.197/posts/${postSelected}`, 
         data: { 
-          id: postId, 
+          id: postSelected, 
         }, 
         headers: { 
           Authorization: `Bearer ${token}`, 
@@ -98,10 +100,13 @@ localStorage.getItem('like',isFavorite);
       }) 
       .then((response) => { 
      
- 
+        console.log(postSelected)
+        fetchData();
       }) 
       .catch((error) => { 
         console.error("Error deleting post:", error); 
+        const errorMessage = "An error occurred while deleting the post , Make sure the post is for you: " + error;
+        window.alert(errorMessage);
       }); 
  
     
@@ -114,15 +119,16 @@ localStorage.getItem('like',isFavorite);
   };
 
   const handleClose = () => {
+    setMenu(false);
     setAnchorEl(null);
   };
-  function handleUpdate(id){
+  function handleUpdate(){
     const newDiscraption = prompt("please add the new disc");
 
     axios
       .request({
         method: "put",
-        url: `http://16.170.173.197/posts/${id}`,
+        url: `http://16.170.173.197/posts/${postSelected}`,
         data: {
           description: newDiscraption,
         },
@@ -132,10 +138,17 @@ localStorage.getItem('like',isFavorite);
       })
       .then((response) => {
         console.log(response);
+        fetchData();
       })
       .catch((error) => {
-        console.error("Error deleting post:", error);
+    const errorMessage = "An error occurred while deleting the post: " + error;
+  window.alert(errorMessage);
       });
+  }
+  function handleverticon(id){
+    console.log(id)
+    setPostSelected(id);
+    setMenu(true);
   }
   return (
     
@@ -175,28 +188,28 @@ localStorage.getItem('like',isFavorite);
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <MoreVertIcon style={{color:"white"}}/>
+        <MoreVertIcon style={{color:"white"}} onClick={()=>{handleverticon(post.id)}}/>
       </Button>
       <Menu
-        id="three-dot-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <button onClick={() => handleDelete(post.id)}>
-        <MenuItem >
-          
-          Delete
-        
-        </MenuItem>
-        </button>
-        <MenuItem onClick={() => {
-          // Handle the edit action here
-          handleUpdate(post.id);
-        }}>
-          Edit
-        </MenuItem>
-      </Menu>
+    id="three-dot-menu"
+    anchorEl={anchorEl}
+    open={menu}
+    onClose={handleClose}
+  >
+    
+    <MenuItem onClick={() => handleDelete()} >
+      
+      Delete
+    
+    </MenuItem>
+   
+    <MenuItem onClick={() => {
+      // Handle the edit action here
+      handleUpdate();
+    }}>
+      Edit
+    </MenuItem>
+  </Menu>
     </div>
             
             </Typography>
@@ -209,13 +222,19 @@ localStorage.getItem('like',isFavorite);
             <Typography gutterBottom variant="h4" component="div">
             <ListItem >
             <Typography style={{color:"white" ,textAlign:"left"}}><a  onClick={()=>{
-             addLike(post.id)
-             handleToggleFavorite(post.id)
+             
+            addLinkePost(post.id)
              
               }} >
-          {isFavorite  ? <FavoriteIcon   style={{color:"red",fontSize:"22px"}}/> : <FavoriteBorderIcon  style={{color:"white",fontSize:"22px"}}/>}
+              
+                  {!isFavorite  ? <FavoriteIcon   style={{color:"red",fontSize:"22px"}}/> : <FavoriteBorderIcon  style={{color:"white",fontSize:"22px"}}/>}
+                  
+
+                  
+
         </a>
-        <TelegramIcon/>
+        <CommentIcon style={{width:"20px",height:"20px"}}/>
+        <TelegramIcon />
 </Typography>
        </ListItem>        
             </Typography>
@@ -250,13 +269,12 @@ localStorage.getItem('like',isFavorite);
         </ListItemAvatar>
         <ListItemText style={{color:"white"}}
           primary="khalid kmail"
-          
-          secondary="followed by khalid"
-          
+          secondary= {<span style={{ color:"#A8A8A8" }}>follow by said</span>}
+         
         />
          <ListItemText
         primary="Follow"
-          sx={{color:"blue"}}
+         
         />
        </ListItem>
        <div style={{ display: "flex",color:"white" }}>
@@ -280,8 +298,8 @@ localStorage.getItem('like',isFavorite);
         <ListItemText
           primary="khalid kmail"
           
-          secondary="followed by khalid"
-          sm={{color:"white" }}
+          secondary={<span style={{ color:"#A8A8A8" }}>followed by mohammad</span>}
+
         />
          <ListItemText
         primary="Follow"
@@ -295,8 +313,9 @@ localStorage.getItem('like',isFavorite);
           <Avatar alt="Travis Howard" src="../Assets/Avatars/steward.png" />
         </ListItemAvatar>
         <ListItemText 
-          primary="Summer BBQ"
-        secondary="jdhghgsjv djhvdsj"
+          primary="Ward Daraghmeh"
+        secondary= {<span style={{ color:"#A8A8A8" }}>followed by moath</span>}
+       
         />
          <ListItemText
         primary="Follow"
@@ -308,14 +327,18 @@ localStorage.getItem('like',isFavorite);
         <ListItemAvatar>
           <Avatar alt="Cindy Baker" src="../Assets/Avatars/steward.png" />
         </ListItemAvatar>
-        <ListItemText
-          primary="Oui Oui"
-          secondary="jdvhsk jghash  cdf"/>
+        <ListItemText style={{color:"#FFF"}}
+          primary="Batool Azzam"
+          secondary={<span style={{ color:"#A8A8A8" }}>follow by anwar</span>}
+          />
+                 
+
          <ListItemText
         primary="Follow"
           sx={{color:"blue"}}
         />
       </ListItem>
+      <br/>
       <Typography style={{fontSize:"13px",color:"	#A8A8A8"}}>About.Help.Press.Api.Jobs.Privacy.Terms</Typography>
       <Typography style={{fontSize:"13px",marginRight:"45px",color:"	#A8A8A8"}}>Location.Language.Meta Verified</Typography>
       <br/>

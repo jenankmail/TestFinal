@@ -82,7 +82,7 @@ function handleSubmit(e){
  <h5 style={{color:"#E0E0E0"}}>Forget Password ?</h5>
   </Box>
   <div style={{backgroundColor:"#1D1D1D",marginTop:"10px",height:"50px",width:"350px",borderRadius:"10px"}}>
-<div style={{paddingTop:"10px"}}>Don't have an account ?  <Link  href="/"style={{textDecoration:"none" ,color:"blue"}}>Sign up</Link></div>
+<div style={{paddingTop:"10px"}}>Don't have an account ?  <Link  href='/signup' style={{textDecoration:"none" ,color:"blue"}}>Sign up</Link></div>
     </div>    
         </Grid>
        
