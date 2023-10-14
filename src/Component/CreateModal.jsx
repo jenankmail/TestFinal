@@ -1,26 +1,21 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import Input from "@mui/material/Input";
 import axios from "axios";
 import { styled } from '@mui/material/styles';
 //import "./ModalStyle.css";
-
+//style of modal-overlay to create modal
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   bgcolor: "red",
-
   transform: "translate(-50%, -50%)",
   width: 500,
   backgroundColor: "#1D1D1D",
 };
-const modalContent={
 
-};
 function CreateModal  ({ open, handleClose, setPosts })  {
   const [description, setdescription] = useState("");
   const [image, setImage] = useState(null)
@@ -28,14 +23,15 @@ function CreateModal  ({ open, handleClose, setPosts })  {
   const [title,setTitle]=useState("")
   const token = localStorage.getItem("token")
 
+  // save the changes to the description in usestate
   const handledescriptionChange = (event) => {
     setdescription(event.target.value);
   };
 
+    // save the changes to the image in usestate
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setImage(file);
-
     const reader = new FileReader();
     reader.onload = () => {
       setImageCover(reader.result);
@@ -43,6 +39,7 @@ function CreateModal  ({ open, handleClose, setPosts })  {
     reader.readAsDataURL(file);
   };
 
+  //We store post information in the form data so you can submit the image as an image and not text
   let formData = new FormData();
 
   formData.append("description", description)
@@ -58,13 +55,15 @@ function CreateModal  ({ open, handleClose, setPosts })  {
     whiteSpace: 'nowrap',
     width: 1,
   });
+
+  // save the changes to the title in usestate
   function handleTitleChange(e){
 setTitle(e.target.value);
   }
+
+  //When you click the submit button, all the data is added to the posts API 
   function handleSubmit(event) {
     event.preventDefault();
-
-
     axios.post("http://16.170.173.197/posts", formData, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -86,14 +85,10 @@ setTitle(e.target.value);
       onClose={handleClose}
       aria-labelledby="modal-modal-description"
       aria-describedby="modal-modal-description"
-      
-    
     > 
       <Box  sx={style}><div className="modal-overlay" >
              
     <div style={{textAlign:"center",color:"white"}} >
-      
-      
                  <div className='HeaderTitle'>
              <h1 id="ModalTitle">Create new post</h1>
               <hr/></div>
@@ -112,16 +107,6 @@ setTitle(e.target.value);
                <label style={{textAlignLast:"right",paddingRight:"420px"}}>Body</label>
                <br/>
                <textarea id='post' name="body"rows="8" cols="73" onChange={handledescriptionChange} style={{width:"90%",height:"80px",borderRadius:"10px",backgroundColor:"#686262"}} ></textarea>
-              
-               </div>
-             
-               
-               
-               <div className='ModalTitle'>
- 
-               
-               
-              
               
                </div>
               <br/>

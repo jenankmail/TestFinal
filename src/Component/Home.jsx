@@ -1,12 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -22,18 +18,13 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Explore from './Explore';
 import ContentHome from './ContentHome';
 import Profile from './Profile';
-import Test from './Test';
 import { Routes ,Route ,Link, Navigate } from 'react-router-dom';
 import Messages from './Messages';
 //import { Modal } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { PrevLink } from './PrevLink';
-import App from '../App';
 import CreateModal from './CreateModal';
-import SignUp from './LogIn';
-import LogInInstagram from './SignUp';
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -162,7 +153,7 @@ function handleClosed(e){
       </Box>
       <hr style={{marginRight:"19px",marginLeft:"0px"}}/>
       <Box sx={{backgroundColor:"black" }}  >
-      
+        
       <Routes>
          <Route  path="/contentHome" element={<ContentHome/>}/>
          <Route  path="/" element={<ContentHome/>}/>

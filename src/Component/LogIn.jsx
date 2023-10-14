@@ -35,11 +35,11 @@ function handleSubmit(e){
           localStorage.setItem("userPosts", userPosts);
           const userbio=response.data.user.bio;
           localStorage.setItem("userbio",userbio);
-         
           navigate('/home')
   
         }).catch((error) => {
-          console.log(error)
+          const errorMessage = "An error occurred while login:(Check password and email) "+ error;
+          window.alert(errorMessage);
         })
 
 }

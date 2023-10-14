@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
-import img from '../Assets/Avatars/steward.png'
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import ListItemText from '@mui/material/ListItemText';
@@ -10,8 +9,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import axios from "axios"
@@ -21,27 +18,17 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
-import {  IconButton } from '@mui/material';
-import { useNavigate } from "react-router-dom";
 import CommentIcon from '@mui/icons-material/Comment';
-import commentIcon from '../Assets/commont.png';
 function ContentHome() {
-  const navigate=useNavigate();
   const [posts,setPosts]=useState([])
   const [postSelected,setPostSelected]=useState(0);
-  const [toggid,setToggid]=("");
   const [menu,setMenu]=useState(false);
-  const [menuClose,setMenuClose]=useState(false);
   const token = localStorage.getItem("token")
   const [isFavorite, setIsFavorite] = useState(localStorage.getItem('like'));
-  const avatar=localStorage.getItem("avatar");
-  const [likeId,setLikeId]=useState("");
-localStorage.setItem('like',isFavorite);
-  function handleToggleFavorite (id){
-    
-    setIsFavorite(!isFavorite);
-    
-  };
+  const loginUser=localStorage.getItem("userId")
+  localStorage.setItem('like',isFavorite);
+
+
   
   const fetchData = () => {
     axios.get("http://16.170.173.197/posts", {
@@ -54,18 +41,21 @@ localStorage.setItem('like',isFavorite);
       console.log("Error Fedching memories", error)
     })
   };
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   useEffect(() => {
     fetchData();
+    localStorage.removeItem('myItems')
+
   }, []);
   
-  function addLinkePost(id){
-    console.log(id)
-    setLikeId(id);
-    
+
+  useEffect(() => {
+    fetchData();
+
+    console.log(loginUser)
+  }, []);
+  
+  function addLikePost(id){
     setIsFavorite(!isFavorite);
     axios 
     .request({ 
@@ -86,6 +76,7 @@ localStorage.setItem('like',isFavorite);
         console.log(error)
       }) 
   }
+
   function handleDelete(){
     axios 
       .request({ 
@@ -101,17 +92,18 @@ localStorage.setItem('like',isFavorite);
       .then((response) => { 
      
         console.log(postSelected)
-        fetchData();
+        fetchData();    // Call the fetchData function when the component mounts directly after delete post
+
       }) 
       .catch((error) => { 
-        console.error("Error deleting post:", error); 
+        console.error("Error deleting post:", error); //print and show the error on console
         const errorMessage = "An error occurred while deleting the post , Make sure the post is for you: " + error;
-        window.alert(errorMessage);
+        window.alert(errorMessage); //Show the error on screen use windows Alert
       }); 
  
     
     };
-  const postsReverce=posts.slice().reverse();
+  const postsReverce=posts.slice().reverse();//Revese the array to display the most recent posts first, not the oldest ones
   const [anchorEl, setAnchorEl] = useState(null);
  
   const handleClick = (event) => {
@@ -119,12 +111,11 @@ localStorage.setItem('like',isFavorite);
   };
 
   const handleClose = () => {
-    setMenu(false);
+    setMenu(false); //Give a value of false to close the menu
     setAnchorEl(null);
   };
   function handleUpdate(){
-    const newDiscraption = prompt("please add the new disc");
-
+    const newDiscraption = prompt("please add the new disc");//Use prompt to enter the new value for the description
     axios
       .request({
         method: "put",
@@ -138,7 +129,7 @@ localStorage.setItem('like',isFavorite);
       })
       .then((response) => {
         console.log(response);
-        fetchData();
+        fetchData();// Call the fetchData function when the component mounts directly after update post
       })
       .catch((error) => {
     const errorMessage = "An error occurred while deleting the post: " + error;
@@ -151,7 +142,7 @@ localStorage.setItem('like',isFavorite);
     setMenu(true);
   }
   return (
-    
+  
     <Box sx={{ flexGrow: 1 ,backgroundColor:"black" }} >
     <Grid container spacing={2} >
       <Grid item xs={6} md={8}>
@@ -223,15 +214,12 @@ localStorage.setItem('like',isFavorite);
             <ListItem >
             <Typography style={{color:"white" ,textAlign:"left"}}><a  onClick={()=>{
              
-            addLinkePost(post.id)
+             addLikePost(post.id)
              
               }} >
               
-                  {!isFavorite  ? <FavoriteIcon   style={{color:"red",fontSize:"22px"}}/> : <FavoriteBorderIcon  style={{color:"white",fontSize:"22px"}}/>}
-                  
-
-                  
-
+              {post.likes.includes(loginUser)? <FavoriteIcon   style={{color:"red",fontSize:"22px"}}/> : <FavoriteBorderIcon  style={{color:"white",fontSize:"22px"}}/>
+}
         </a>
         <CommentIcon style={{width:"20px",height:"20px"}}/>
         <TelegramIcon />
