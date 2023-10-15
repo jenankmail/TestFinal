@@ -7,7 +7,7 @@ function NotFound() {
     <div>
         <h1 style={{color:"green"}}>page Not Found 404</h1>
         <Link to="/">
-        <button    >go to login</button>
+        <button    >go Back</button>
         </Link>
     </div>
   )

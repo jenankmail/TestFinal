@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import img from '../Assets/iPhoneScreen.png'
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -11,6 +11,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
 import Link from "@mui/material/Link";
+import ResetPassword from '../Modal/ResetPassword';
 function LogIn() {
   const [userData,SetuserData]=useState({
    
@@ -18,6 +19,10 @@ function LogIn() {
     email:""
   });
 const navigate=useNavigate();
+const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 function handleSubmit(e){
   e.preventDefault()
   axios.post("http://16.170.173.197/users/login", userData)
@@ -27,14 +32,7 @@ function handleSubmit(e){
           localStorage.setItem("token", token)
           const userId=response.data.user.id;
           localStorage.setItem("userId", userId)
-          const userName=response.data.user.userName;
-          localStorage.setItem("userName", userName)
-          const avatar=response.data.user.avatar;
-          localStorage.setItem("avatar", avatar);
-          const userPosts=response.data.user.posts.length;
-          localStorage.setItem("userPosts", userPosts);
-          const userbio=response.data.user.bio;
-          localStorage.setItem("userbio",userbio);
+         
           navigate('/home')
   
         }).catch((error) => {
@@ -42,6 +40,10 @@ function handleSubmit(e){
           window.alert(errorMessage);
         })
 
+}
+
+function handlealertconfirm(){
+  handleOpen();
 }
   return (
     <>
@@ -79,11 +81,13 @@ function handleSubmit(e){
 <td style={{width:"48%"}}><hr style={{borderBlockColor:"#E0E0E0"}}/></td>
 </tr></table>
 <Button variant="contained" style={{margin:"15px",width:"270px",height:"30px"}}><FacebookIcon/> Login with Facebook</Button>
- <h5 style={{color:"#E0E0E0"}}>Forget Password ?</h5>
+ <h5 style={{color:"#E0E0E0"}} onClick={handlealertconfirm}>Forget Password ?</h5>
   </Box>
   <div style={{backgroundColor:"#1D1D1D",marginTop:"10px",height:"50px",width:"350px",borderRadius:"10px"}}>
 <div style={{paddingTop:"10px"}}>Don't have an account ?  <Link  href='/signup' style={{textDecoration:"none" ,color:"blue"}}>Sign up</Link></div>
-    </div>    
+    </div>  
+    <ResetPassword open={open} handleClose={handleClose} />
+  
         </Grid>
        
       </Grid>

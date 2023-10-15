@@ -10,7 +10,7 @@ import img2 from '../Assets/androidScreen.png';
 import img from '../Assets/iPhoneScreen.png';
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
-import Home from './Home'
+import Home from '../Component/Home'
 import Link from "@mui/material/Link";
 
 function SignUp() {

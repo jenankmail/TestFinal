@@ -241,7 +241,7 @@ if(newDiscraption=="delete"){
   );
 }
 
-const postUser2=[];
+
 const itemData = [
     {
       img: '../Assets/ExplorePics/explorePic1.avif',

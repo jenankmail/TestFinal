@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import axios from "axios"
+import  { useEffect } from 'react'
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -9,23 +10,57 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import SettingsIcon from '@mui/icons-material/Settings';
-import Test from './Test'
+import Test from '../Modal/Test'
 import { useState } from 'react';
-import ProfileModal from './ProfileModal';
+import ProfileModal from '../Modal/ProfileModal';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-function Profile() {
-    const userName=localStorage.getItem("userName");
-    const [open, setOpen] = useState(false);
 
+function Profile() {
+    const [open, setOpen] = useState(false);
+const[user,setuser]=useState([]);
+const [post,setPost]=useState("");
+const [userName,setUserName]=useState("");
+const [avatar,setAvatar]=useState("");
+localStorage.setItem("userName", userName)
+localStorage.setItem("avatar", avatar);
+const [bio,setBio]=useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-    const avatar=localStorage.getItem("avatar")
-    const bio =localStorage.getItem("userbio")
-    const userPost=localStorage.getItem("userPosts")
+   
     const token = localStorage.getItem("token")
-
     const userId=localStorage.getItem("userId")
+     const[users,setUsers]=useState([])
+    const fetchuser = () => {
+      axios.get("http://16.170.173.197/users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((response) => {
+        const array=response.data.users;
+       const postsUser=array.filter((post)=>post.id==userId);
+      setuser(postsUser);
+      postsUser.map((post)=>{
+setUserName(post.userName);
+setAvatar(post.avatar);
+setBio(post.bio);
+setPost(post.posts.length);
+
+      })
+        
+
+      
+       
+          }).catch((error) => {
+        console.log("Error Fedching memories", error)
+      });
+    };
+
+    useEffect(() => {
+      fetchuser();
+     // console.log(User1);
+    }, []);
+
+
     function deleteAccount(){
       const newDiscraption = prompt("You are sure that you want to delete the account, knowing that everything related to it will be gone!! yes or no");
      if(newDiscraption=="yes"){
@@ -93,7 +128,7 @@ function Profile() {
         <DeleteForeverIcon style={{marginLeft:"130px"}} onClick={deleteAccount}/>
         </Grid>
         <Grid item xs={4}>
-{userPost} Posts      </Grid>
+{post} Posts      </Grid>
         <Grid item xs={4}>
 525 followers   </Grid>
         <Grid item xs={4}>
@@ -111,7 +146,7 @@ function Profile() {
    
         </Paper>
         <Test />
-        <ProfileModal open={open} handleClose={handleClose} />
+        <ProfileModal open={open} handleClose={handleClose}  setuser={fetchuser}/>
 
         </Box>
       );

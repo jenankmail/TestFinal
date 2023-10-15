@@ -24,7 +24,7 @@ import Messages from './Messages';
 import Avatar from '@mui/material/Avatar';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import CreateModal from './CreateModal';
+import CreateModal from '../Modal/CreateModal';
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
 import LogoutIcon from '@mui/icons-material/Logout';

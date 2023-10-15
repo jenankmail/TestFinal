@@ -21,7 +21,8 @@ const style = {
 const modalContent={
 
 };
-function  ProfileModal  ({ open, handleClose, setPosts })  {
+function  ProfileModal  ({ open, handleClose, setuser })  {
+ 
   const [description, setdescription] = useState("");
   const [image, setImage] = useState(null)
   const [imageCover, setImageCover] = useState(null);
@@ -86,8 +87,8 @@ setTitle(e.target.value);
       }, 
     }) 
     .then((response) => { 
-      console.log(response); 
-     console.log(image.name)
+      setuser();
+
     }) 
     .catch((error) => { 
       console.error("Error deleting post:", error); 

@@ -4,24 +4,23 @@ import ContentHome from './Component/ContentHome';
 //import ContentHome from './Component/ContentHome';
 //import Explore from './Component/Explore';
 import Home from './Component/Home'
-import Test from './Component/Test'
+import Test from './Modal/Test'
 
 import Messages from './Component/Messages'
 import Profile from './Component/Profile';
-import Modal from './Component/CreateModal';
+import Modal from './Modal/CreateModal';
 import { Routes ,Route } from 'react-router-dom';
 import Explore from './Component/Explore';
-import {PrevLink} from './Component/PrevLink';
 import { useContext, useState } from 'react';
-import LogIn from './Component/LogIn'
-import SignUp from './Component/SignUp';
+import LogIn from './Auth/LogIn'
+import SignUp from './Auth/SignUp';
 //import { Login } from '@mui/icons-material';
-import LogInInstagram from './Component/SignUp'
+import LogInInstagram from './Auth/SignUp'
 import ProtectedAuth from './Routes/ProtectedAuth';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import ProtectedHome from './Routes/ProtectedHome';
-import NotFound from './Component/NotFound';
+import NotFound from './Modal/NotFound';
 const theme = createTheme({
   typography: {
     fontFamily: ["Poppins"],
